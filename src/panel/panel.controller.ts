@@ -34,12 +34,26 @@ export class PanelController {
   }
 
   @Post('prestamos')
-  async prestar(@Req() req: { usuario: Usuario }, @Body() cuerpo: { libroId?: unknown }) {
-    return this.panel.prestar(req.usuario.sub, cuerpo.libroId);
+  async prestar(
+    @Req() req: { usuario: Usuario; headers: Record<string, string | undefined> },
+    @Body() cuerpo: { libroId?: unknown },
+  ) {
+    return this.panel.prestar(
+      req.usuario.sub,
+      cuerpo.libroId,
+      req.headers['authorization'] ?? '',
+    );
   }
 
   @Delete('prestamos/:id')
-  async devolver(@Req() req: { usuario: Usuario }, @Param('id', ParseIntPipe) id: number) {
-    return this.panel.devolver(req.usuario.sub, id);
+  async devolver(
+    @Req() req: { usuario: Usuario; headers: Record<string, string | undefined> },
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.panel.devolver(
+      req.usuario.sub,
+      id,
+      req.headers['authorization'] ?? '',
+    );
   }
 }
